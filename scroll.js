@@ -28,22 +28,8 @@
     vertScrollbarObj = $("#"+vertScrollbarID);
     horizScrollbarObj = $("#"+horizScrollbarID);
 
-    var dragging = null;
-    $("#"+vertScrollbarID).mousedown(function(e){
-      dragging = $(e.target);
-    });
-    $("#"+vertScrollbarID).mouseup(function(e){
-      dragging = null;
-    });
-
-    $("#"+vertScrollbarID).mousemove(function(e){
-      if (dragging){
-        console.log('dragging');
-        dragging.offset({
-            top: e.pageY
-        });
-      }
-    });
+    var scrollableElemHeight = elem.height() - vertScrollbarObj.height();
+    var scrollableElemWidth = elem.width() - horizScrollbarObj.width();
 
     elem.on('mousewheel', function(event) {
 
@@ -62,9 +48,6 @@
       var percentVert = verticalPoint/scrollableHeight;
       var percentHoriz = horizontalPoint/scrollableWidth;
 
-      var scrollableElemHeight = elem.height() - vertScrollbarObj.height();
-      var scrollableElemWidth = elem.width() - horizScrollbarObj.width();
-
       var vertScrollerPosY = parseInt(scrollableHeight*percentVert + scrollableElemHeight*percentVert);
       var vertScrollerPosX = parseInt(scrollableWidth*percentHoriz + elem.width() - vertScrollbarObj.width());
 
@@ -76,6 +59,30 @@
 
       horizScrollbarObj.css('left',String(horizScrollerPosX));
       horizScrollbarObj.css('top',String(horizScrollerPosY));
+    });
+
+    var dragging = null;
+    $("#"+vertScrollbarID).mousedown(function(e){
+      dragging = $(e.target);
+    });
+    $(document).mouseup(function(e){
+      dragging = null;
+    });
+
+    $(document).mousemove(function(e){
+      if (dragging){
+        var scrollbarTop = Math.min(e.pageY,scrollableElemHeight);
+        if (scrollbarTop < 0){
+          scrollbarTop = 0;
+        }
+        dragging.offset({
+            top: scrollbarTop
+        });
+
+        percentScroll = e.pageY/scrollableElemHeight;
+        var top = Math.min(percentScroll*scrollableHeight,scrollableHeight);
+        elem.scrollTop(top);
+      }
     });
   }
 })(jQuery);

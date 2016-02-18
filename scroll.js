@@ -60,29 +60,5 @@
       horizScrollbarObj.css('left',String(horizScrollerPosX));
       horizScrollbarObj.css('top',String(horizScrollerPosY));
     });
-
-    var dragging = null;
-    $("#"+vertScrollbarID).mousedown(function(e){
-      dragging = $(e.target);
-    });
-    $(document).mouseup(function(e){
-      dragging = null;
-    });
-
-    $(document).mousemove(function(e){
-      if (dragging){
-        var scrollbarTop = Math.min(e.pageY,scrollableElemHeight);
-        if (scrollbarTop < 0){
-          scrollbarTop = 0;
-        }
-        dragging.offset({
-            top: scrollbarTop
-        });
-
-        percentScroll = e.pageY/scrollableElemHeight;
-        var top = Math.min(percentScroll*scrollableHeight,scrollableHeight);
-        elem.scrollTop(top);
-      }
-    });
   }
 })(jQuery);

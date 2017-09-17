@@ -6,7 +6,7 @@
       height: '300px',
       width: '200px',
       scrollerWidth: '3px',
-      scrollerHeight: '100px',
+      scrollerHeight: '50px',
       scrollSpeed: 10,
     }, configuration);
     elem.css('position','relative');
